@@ -71,3 +71,223 @@ END //
 
 DELIMITER ;
 
+CALL LoanReminder();
+
+Select * from loans
+
+
+ALTER TABLE Loans
+ADD COLUMN DueDate DATE;
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE Loans
+SET DueDate = CASE LoanID
+    WHEN 1 THEN DATE_ADD(CURDATE(), INTERVAL 5 DAY)
+    WHEN 2 THEN DATE_ADD(CURDATE(), INTERVAL 15 DAY)
+    WHEN 3 THEN DATE_ADD(CURDATE(), INTERVAL 25 DAY)
+    WHEN 4 THEN DATE_ADD(CURDATE(), INTERVAL 40 DAY)
+    WHEN 5 THEN DATE_ADD(CURDATE(), INTERVAL 60 DAY)
+    ELSE DATE_ADD(CURDATE(), INTERVAL 20 DAY)
+END;
+
+CALL LoanReminder();
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE SafeTransferFunds(
+    IN p_from INT,
+    IN p_to INT,
+    IN p_amount DECIMAL(10,2)
+)
+BEGIN
+    DECLARE balance DECIMAL(10,2);
+
+    START TRANSACTION;
+
+    SELECT Balance
+    INTO balance
+    FROM Accounts
+    WHERE AccountID = p_from;
+
+    IF balance < p_amount THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Insufficient Funds';
+    ELSE
+        UPDATE Accounts
+        SET Balance = Balance - p_amount
+        WHERE AccountID = p_from;
+
+        UPDATE Accounts
+        SET Balance = Balance + p_amount
+        WHERE AccountID = p_to;
+
+        COMMIT;
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL SafeTransferFunds(1, 2, 500);
+
+DELIMITER //
+
+CREATE PROCEDURE UpdateSalary(
+    IN emp_id INT,
+    IN percent_inc DECIMAL(5,2)
+)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeID = emp_id) THEN
+
+        UPDATE Employees
+        SET Salary = Salary + (Salary * percent_inc / 100)
+        WHERE EmployeeID = emp_id;
+
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Employee Not Found';
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL UpdateSalary(101, 10);
+
+select * from employees
+
+
+CREATE OR REPLACE PROCEDURE UpdateSalary (
+    p_emp_id IN NUMBER,
+    p_percent IN NUMBER
+)
+IS
+BEGIN
+    UPDATE Employees
+    SET Salary = Salary + (Salary * p_percent / 100)
+    WHERE EmployeeID = p_emp_id;
+
+    IF SQL%ROWCOUNT = 0 THEN
+        DBMS_OUTPUT.PUT_LINE('ERROR: Employee Not Found');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Salary Updated Successfully');
+    END IF;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Unexpected Error Occurred');
+END;
+
+
+DELIMITER //
+
+CREATE PROCEDURE AddNewCustomer(
+    IN cid INT,
+    IN cname VARCHAR(100),
+    IN balance DECIMAL(10,2)
+)
+BEGIN
+
+    IF EXISTS (SELECT 1 FROM Customers WHERE CustomerID = cid) THEN
+
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT='Customer already exists';
+
+    ELSE
+
+        INSERT INTO Customers(CustomerID,Name,Balance)
+        VALUES(cid,cname,balance);
+
+    END IF;
+
+END //
+
+DELIMITER ;
+
+CALL AddNewCustomer(201, 'Ravi', 8000);
+
+
+DELIMITER //
+
+CREATE PROCEDURE ProcessMonthlyInterest()
+BEGIN
+    UPDATE Accounts
+    SET Balance = Balance * 1.01
+    WHERE AccountType = 'Savings';
+END //
+
+DELIMITER ;
+
+CALL ProcessMonthlyInterest();
+Select * from Accounts;
+
+
+DELIMITER //
+
+CREATE PROCEDURE UpdateEmployeeBonus(
+    IN dept VARCHAR(50),
+    IN bonus DECIMAL(5,2)
+)
+BEGIN
+    UPDATE Employees
+    SET Salary = Salary + (Salary * bonus / 100)
+    WHERE Department = dept;
+END //
+
+DELIMITER ;
+
+CALL UpdateEmployeeBonus('IT', 5);
+Select * from employees;
+
+DELIMITER //
+
+CREATE PROCEDURE TransferFunds(
+    IN fromAcc INT,
+    IN toAcc INT,
+    IN amt DECIMAL(10,2)
+)
+BEGIN
+    DECLARE bal DECIMAL(10,2);
+
+    SELECT Balance INTO bal
+    FROM Accounts
+    WHERE AccountID = fromAcc;
+
+    IF bal >= amt THEN
+        UPDATE Accounts SET Balance = Balance - amt WHERE AccountID = fromAcc;
+        UPDATE Accounts SET Balance = Balance + amt WHERE AccountID = toAcc;
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Insufficient Balance';
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL TransferFunds(1, 2, 1000);
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE UpdateSalary(
+    IN emp_id INT,
+    IN percent_inc DECIMAL(5,2)
+)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Employees WHERE EmployeeID = emp_id) THEN
+
+        UPDATE Employees
+        SET Salary = Salary + (Salary * percent_inc / 100)
+        WHERE EmployeeID = emp_id;
+
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Employee Not Found';
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL UpdateSalary(101, 10);
