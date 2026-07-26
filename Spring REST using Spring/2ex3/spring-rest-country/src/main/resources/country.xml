@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Country: India -->
+    <bean id="countryIN" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="IN" />
+        <property name="name" value="India" />
+    </bean>
+
+    <!-- Country: United States -->
+    <bean id="countryUS" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="US" />
+        <property name="name" value="United States" />
+    </bean>
+
+    <!-- Country: Germany -->
+    <bean id="countryDE" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="DE" />
+        <property name="name" value="Germany" />
+    </bean>
+
+    <!-- Country: Japan -->
+    <bean id="countryJP" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="JP" />
+        <property name="name" value="Japan" />
+    </bean>
+
+    <!-- Country: United Kingdom -->
+    <bean id="countryGB" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="GB" />
+        <property name="name" value="United Kingdom" />
+    </bean>
+
+    <!-- Country: France -->
+    <bean id="countryFR" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="FR" />
+        <property name="name" value="France" />
+    </bean>
+
+    <!-- Country: Australia -->
+    <bean id="countryAU" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="AU" />
+        <property name="name" value="Australia" />
+    </bean>
+
+    <!-- Country: Canada -->
+    <bean id="countryCA" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="CA" />
+        <property name="name" value="Canada" />
+    </bean>
+
+    <!-- Country: Brazil -->
+    <bean id="countryBR" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="BR" />
+        <property name="name" value="Brazil" />
+    </bean>
+
+    <!-- Country: China -->
+    <bean id="countryCN" class="com.cognizant.spring_rest_country.model.Country">
+        <property name="code" value="CN" />
+        <property name="name" value="China" />
+    </bean>
+
+</beans>
