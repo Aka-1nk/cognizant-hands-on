@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class About extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Welcome to the About page of the Student Management Portal</h1>
-            </div>
-        );
-    }
+function About() {
+    return (
+        <div>
+            <h1>Welcome to the About page of the Student Management Portal</h1>
+        </div>
+    );
 }
 
 export default About;
