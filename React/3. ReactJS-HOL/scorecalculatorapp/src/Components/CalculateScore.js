@@ -1,14 +1,14 @@
-import './Stylesheets/mystyle.css'
+import '../Stylesheets/mystyle.css';
 
 const percentToDecimal = (decimal) => {
-    return (decimal.toFixed(2) + '%')
-}
+    return (decimal.toFixed(2) + '%');
+};
 
 const calcScore = (total, goal) => {
-    return percentToDecimal(total/goal)
-}
+    return percentToDecimal(total / goal);
+};
 
-export const CalculateScore = ({Name, School, total, goal}) => {
+export const CalculateScore = ({ Name, School, total, goal }) => {
     return (
         <div className="formatstyle">
             <h1><font color="Brown">Student Details:</font></h1>
@@ -32,5 +32,5 @@ export const CalculateScore = ({Name, School, total, goal}) => {
                 </span>
             </div>
         </div>
-    )
-}
+    );
+};
